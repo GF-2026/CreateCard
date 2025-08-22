@@ -79,3 +79,217 @@
     }
 
     /* 🌟 NUEVA PLANTILLA TIPO FLYER */
+    .plantilla-flyer {
+      background: white;
+      border: 2px solid #0D47A1;
+      color: #0D47A1;
+      font-family: "Arial", sans-serif;
+    }
+
+    .plantilla-flyer::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: #0D47A1;
+      border-top-right-radius: 80px;
+      z-index: 0;
+    }
+
+    .plantilla-flyer .info {
+      position: relative;
+      z-index: 1;
+      color: #0D47A1;
+    }
+
+    .plantilla-flyer .nombre {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #0D47A1;
+    }
+
+    .plantilla-flyer .puesto {
+      font-size: 1em;
+      color: #388E3C;
+      font-weight: bold;
+    }
+
+    .plantilla-flyer .contacto {
+      font-size: 0.85em;
+      color: white;
+    }
+
+    .plantilla-flyer img {
+      border-radius: 15px;
+      border: 3px solid #0D47A1;
+      width: 100px !important;
+      height: 120px !important;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    /* LOGO ARRIBA A LA DERECHA */
+    .plantilla-flyer .logo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 60px;
+      height: auto;
+      z-index: 2;
+    }
+
+    .botones {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background: #388E3C;
+    }
+  </style>
+</head>
+<body>
+  <h2>Generador de Tarjeta de Presentación</h2>
+
+  <!-- Formulario -->
+  <form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre completo">
+    <input type="text" id="puesto" placeholder="Puesto / Rol">
+    <input type="text" id="empresa" placeholder="Empresa">
+    <input type="text" id="telefono" placeholder="Teléfono">
+    <input type="email" id="correo" placeholder="Correo">
+    <input type="file" id="foto" accept="image/*">
+    <input type="file" id="logo" accept="image/*">
+    <select id="plantilla">
+      <option value="plantilla-clasica">Clásica</option>
+      <option value="plantilla-azul">Azul</option>
+      <option value="plantilla-minimal">Minimalista</option>
+      <option value="plantilla-flyer">Flyer</option>
+    </select>
+  </form>
+
+  <!-- Tarjeta -->
+  <div class="tarjeta plantilla-clasica" id="tarjeta">
+    <img id="previewFoto" src="https://via.placeholder.com/80" alt="Foto">
+    <div class="info">
+      <div class="nombre" id="previewNombre">Tu Nombre</div>
+      <div class="puesto" id="previewPuesto">Tu Puesto</div>
+      <div class="contacto" id="previewEmpresa">Empresa</div>
+      <div class="contacto" id="previewTelefono">Teléfono</div>
+      <div class="contacto" id="previewCorreo">Correo</div>
+    </div>
+    <img id="previewLogo" class="logo" src="" alt="Logo" style="display:none;">
+  </div>
+
+  <!-- Botones -->
+  <div class="botones">
+    <button id="descargarPNG">Descargar PNG</button>
+    <button id="descargarPDF">Descargar PDF</button>
+  </div>
+
+  <!-- Librerías -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    const inputs = {
+      nombre: document.getElementById("nombre"),
+      puesto: document.getElementById("puesto"),
+      empresa: document.getElementById("empresa"),
+      telefono: document.getElementById("telefono"),
+      correo: document.getElementById("correo"),
+      foto: document.getElementById("foto"),
+      logo: document.getElementById("logo"),
+      plantilla: document.getElementById("plantilla"),
+    };
+
+    const previews = {
+      nombre: document.getElementById("previewNombre"),
+      puesto: document.getElementById("previewPuesto"),
+      empresa: document.getElementById("previewEmpresa"),
+      telefono: document.getElementById("previewTelefono"),
+      correo: document.getElementById("previewCorreo"),
+      foto: document.getElementById("previewFoto"),
+      logo: document.getElementById("previewLogo"),
+      tarjeta: document.getElementById("tarjeta"),
+    };
+
+    // Actualizar texto
+    for (let key in inputs) {
+      if (key !== "foto" && key !== "logo" && key !== "plantilla") {
+        inputs[key].addEventListener("input", () => {
+          previews[key].textContent = inputs[key].value;
+        });
+      }
+    }
+
+    // Actualizar foto
+    inputs.foto.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          previews.foto.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Actualizar logo
+    inputs.logo.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          previews.logo.src = reader.result;
+          previews.logo.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Cambiar plantilla
+    inputs.plantilla.addEventListener("change", () => {
+      previews.tarjeta.className = "tarjeta " + inputs.plantilla.value;
+    });
+
+    // Descargar PNG
+    document.getElementById("descargarPNG").addEventListener("click", () => {
+      html2canvas(previews.tarjeta).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "tarjeta.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    });
+
+    // Descargar PDF
+    document.getElementById("descargarPDF").addEventListener("click", () => {
+      html2canvas(previews.tarjeta).then(canvas => {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("landscape", "pt", "a4");
+        const imgData = canvas.toDataURL("image/png");
+        
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, "PNG", 20, 20, pdfWidth - 40, pdfHeight);
+        pdf.save("tarjeta.pdf");
+      });
+    });
+  </script>
+</body>
+</html>
