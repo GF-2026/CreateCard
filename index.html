@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Tarjetas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+
+    h2 { color: #333; }
+
+    form {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    form input {
+      display: block;
+      margin: 8px 0;
+      padding: 8px;
+      width: 250px;
+    }
+
+    .tarjeta {
+      width: 400px;
+      height: 200px;
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      border-radius: 15px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .tarjeta img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .tarjeta .info {
+      flex: 1;
+      margin-left: 20px;
+    }
+
+    .nombre { font-size: 1.4em; font-weight: bold; }
+    .puesto { font-size: 1em; margin-bottom: 8px; }
+    .contacto { font-size: 0.9em; }
+
+    .botones {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background: #388E3C;
+    }
+  </style>
+</head>
+<body>
+  <h2>Generador de Tarjeta de Presentación</h2>
+
+  <!-- Formulario -->
+  <form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre completo">
+    <input type="text" id="puesto" placeholder="Puesto / Rol">
+    <input type="text" id="empresa" placeholder="Empresa">
+    <input type="text" id="telefono" placeholder="Teléfono">
+    <input type="email" id="correo" placeholder="Correo">
+    <input type="file" id="foto" accept="image/*">
+  </form>
+
+  <!-- Tarjeta -->
+  <div class="tarjeta" id="tarjeta">
+    <img id="previewFoto" src="https://via.placeholder.com/80" alt="Foto">
+    <div class="info">
+      <div class="nombre" id="previewNombre">Tu Nombre</div>
+      <div class="puesto" id="previewPuesto">Tu Puesto</div>
+      <div class="contacto" id="previewEmpresa">Empresa</div>
+      <div class="contacto" id="previewTelefono">Teléfono</div>
+      <div class="contacto" id="previewCorreo">Correo</div>
+    </div>
+  </div>
+
+  <!-- Botones de descarga -->
+  <div class="botones">
+    <button id="descargarPNG">Descargar PNG</button>
+    <button id="descargarPDF">Descargar PDF</button>
+  </div>
+
+  <!-- Librerías -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    const inputs = {
+      nombre: document.getElementById("nombre"),
+      puesto: document.getElementById("puesto"),
+      empresa: document.getElementById("empresa"),
+      telefono: document.getElementById("telefono"),
+      correo: document.getElementById("correo"),
+      foto: document.getElementById("foto"),
+    };
+
+    const previews = {
+      nombre: document.getElementById("previewNombre"),
+      puesto: document.getElementById("previewPuesto"),
+      empresa: document.getElementById("previewEmpresa"),
+      telefono: document.getElementById("previewTelefono"),
+      correo: document.getElementById("previewCorreo"),
+      foto: document.getElementById("previewFoto"),
+    };
+
+    // Actualizar texto
+    for (let key in inputs) {
+      if (key !== "foto") {
+        inputs[key].addEventListener("input", () => {
+          previews[key].textContent = inputs[key].value;
+        });
+      }
+    }
+
+    // Actualizar imagen
+    inputs.foto.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          previews.foto.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Descargar como PNG
+    document.getElementById("descargarPNG").addEventListener("click", () => {
+      const tarjeta = document.getElementById("tarjeta");
+      html2canvas(tarjeta).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "tarjeta.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    });
+
+    // Descargar como PDF
+    document.getElementById("descargarPDF").addEventListener("click", () => {
+      const tarjeta = document.getElementById("tarjeta");
+      html2canvas(tarjeta).then(canvas => {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("landscape", "pt", "a4");
+        const imgData = canvas.toDataURL("image/png");
+        
+        // Ajustar tamaño proporcional
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, "PNG", 20, 20, pdfWidth - 40, pdfHeight);
+        pdf.save("tarjeta.pdf");
+      });
+    });
+  </script>
+</body>
+</html>
