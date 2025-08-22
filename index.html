@@ -18,8 +18,8 @@
     form {
       background: #fff;
       padding: 15px;
-      border-radius: 5px;
-      box-shadow: 0 2px 8px black;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 20px;
     }
 
@@ -33,13 +33,13 @@
     .tarjeta {
       width: 420px;
       height: 240px;
-      border-radius: 20px;
+      border-radius: 15px;
       color: white;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 20px;
-      box-shadow: 0 4px 12px black;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
       overflow: hidden;
       position: relative;
@@ -48,7 +48,7 @@
     .tarjeta img {
       width: 80px;
       height: 80px;
-      border-radius: 10%;
+      border-radius: 50%;
       object-fit: cover;
       border: 2px solid white;
     }
@@ -59,15 +59,30 @@
       z-index: 1;
     }
 
-    .nombre { font-size: 1em; font-weight: bold; }
-    .puesto { font-size: 1em; margin-bottom: 8px; font-weight: bold; }
-    .contacto { font-size: 0.9em; font-weight: bold; }
+    .nombre { font-size: 1.4em; font-weight: bold; }
+    .puesto { font-size: 1em; margin-bottom: 8px; }
+    .contacto { font-size: 0.9em; }
+
+    /* 🎨 PLANTILLAS */
+    .plantilla-clasica {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    }
+
+    .plantilla-azul {
+      background: linear-gradient(135deg, #2196F3, #0D47A1);
+    }
+
+    .plantilla-minimal {
+      background: white;
+      color: black;
+      border: 2px solid #333;
+    }
 
     /* 🌟 NUEVA PLANTILLA TIPO FLYER */
     .plantilla-flyer {
       background: white;
-      border: 3px solid black;
-      color: black;
+      border: 2px solid #0D47A1;
+      color: #0D47A1;
       font-family: "Arial", sans-serif;
     }
 
@@ -77,27 +92,27 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 80%;
-      background: #d5007f;
-      border-top-right-radius: 120px;
+      height: 50%;
+      background: #0D47A1;
+      border-top-right-radius: 80px;
       z-index: 0;
     }
 
     .plantilla-flyer .info {
       position: relative;
       z-index: 1;
-      color: green;
+      color: #0D47A1;
     }
 
     .plantilla-flyer .nombre {
       font-size: 1.3em;
       font-weight: bold;
-      color: black;
+      color: #0D47A1;
     }
 
     .plantilla-flyer .puesto {
       font-size: 1em;
-      color: #d5007f;
+      color: #388E3C;
       font-weight: bold;
     }
 
@@ -114,8 +129,8 @@
       object-fit: cover;
       z-index: 1;
     }
-    }        
-  /* LOGO ARRIBA A LA DERECHA */
+
+    /* LOGO ARRIBA A LA DERECHA */
     .plantilla-flyer .logo {
       position: absolute;
       top: 10px;
@@ -159,6 +174,9 @@
     <input type="file" id="foto" accept="image/*">
     <input type="file" id="logo" accept="image/*">
     <select id="plantilla">
+      <option value="plantilla-clasica">Clásica</option>
+      <option value="plantilla-azul">Azul</option>
+      <option value="plantilla-minimal">Minimalista</option>
       <option value="plantilla-flyer">Flyer</option>
     </select>
   </form>
