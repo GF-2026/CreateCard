@@ -56,7 +56,14 @@
       font-size: 2em;
       color: white;
     }
-
+    /* Nombre */
+    .tarjeta.plantilla-canva .nombre {
+      position: absolute;
+      bottom: 10px;
+      left: 40px;
+      font-size: 2em;
+      color: white;
+    }
     /* Formulario */
     .formulario {
       margin-top: 20px;
@@ -97,6 +104,7 @@
     <input type="file" id="fotoInput" accept="image/*">
     <input type="text" id="ciudadInput" placeholder="Escribe tu ciudad">
     <input type="text" id="telefonoInput" placeholder="Escribe tu teléfono">
+    <input type="text" id="nombreInput" placeholder="Escribe tu nombre">    
     <button id="descargarBtn">Descargar tarjeta</button>
   </div>
 
@@ -122,6 +130,12 @@
     const previewCiudad = document.getElementById("previewCiudad");
     ciudadInput.addEventListener("input", function() {
       previewCiudad.textContent = ciudadInput.value || "Ciudad";
+    });
+        // === NOMBRE ===
+    const nombreInput = document.getElementById("nombreInput");
+    const previewNombre = document.getElementById("previewNombre");
+    ciudadInput.addEventListener("input", function() {
+      previewNombre.textContent = nombreInput.value || "Nombre";
     });
 
     // === TELÉFONO ===
