@@ -152,7 +152,8 @@
 
     // === DESCARGAR TARJETA ===
     document.getElementById("descargarBtn").addEventListener("click", function() {
-      html2canvas(document.getElementById("tarjeta")).then(canvas => {
+      html2canvas(document.getElementById("tarjeta"), {
+        scale:4}).then(canvas => {
         const link = document.createElement("a");
         link.download = "tarjeta.png";
         link.href = canvas.toDataURL("image/png");
